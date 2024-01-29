@@ -153,6 +153,38 @@ mixin _$SneakerFormController on _SneakerFormControllerBase, Store {
     });
   }
 
+  late final _$hasUpdatedScreenAtom = Atom(
+      name: '_SneakerFormControllerBase.hasUpdatedScreen', context: context);
+
+  @override
+  bool get hasUpdatedScreen {
+    _$hasUpdatedScreenAtom.reportRead();
+    return super.hasUpdatedScreen;
+  }
+
+  @override
+  set hasUpdatedScreen(bool value) {
+    _$hasUpdatedScreenAtom.reportWrite(value, super.hasUpdatedScreen, () {
+      super.hasUpdatedScreen = value;
+    });
+  }
+
+  late final _$sneakerAtom =
+      Atom(name: '_SneakerFormControllerBase.sneaker', context: context);
+
+  @override
+  Sneaker? get sneaker {
+    _$sneakerAtom.reportRead();
+    return super.sneaker;
+  }
+
+  @override
+  set sneaker(Sneaker? value) {
+    _$sneakerAtom.reportWrite(value, super.sneaker, () {
+      super.sneaker = value;
+    });
+  }
+
   late final _$onRegisterSneakerAsyncAction = AsyncAction(
       '_SneakerFormControllerBase.onRegisterSneaker',
       context: context);
@@ -164,6 +196,17 @@ mixin _$SneakerFormController on _SneakerFormControllerBase, Store {
 
   late final _$_SneakerFormControllerBaseActionController =
       ActionController(name: '_SneakerFormControllerBase', context: context);
+
+  @override
+  dynamic onUpdatedFields(Sneaker sneaker) {
+    final _$actionInfo = _$_SneakerFormControllerBaseActionController
+        .startAction(name: '_SneakerFormControllerBase.onUpdatedFields');
+    try {
+      return super.onUpdatedFields(sneaker);
+    } finally {
+      _$_SneakerFormControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   dynamic onNameChanged(String name) {
@@ -231,7 +274,9 @@ urlError: ${urlError},
 price: ${price},
 priceError: ${priceError},
 rating: ${rating},
-ratingError: ${ratingError}
+ratingError: ${ratingError},
+hasUpdatedScreen: ${hasUpdatedScreen},
+sneaker: ${sneaker}
     ''';
   }
 }

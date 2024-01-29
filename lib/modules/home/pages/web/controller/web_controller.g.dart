@@ -25,6 +25,46 @@ mixin _$WebController on _WebControllerBase, Store {
     });
   }
 
+  late final _$sneakersListAtom =
+      Atom(name: '_WebControllerBase.sneakersList', context: context);
+
+  @override
+  ObservableList<Sneaker> get sneakersList {
+    _$sneakersListAtom.reportRead();
+    return super.sneakersList;
+  }
+
+  @override
+  set sneakersList(ObservableList<Sneaker> value) {
+    _$sneakersListAtom.reportWrite(value, super.sneakersList, () {
+      super.sneakersList = value;
+    });
+  }
+
+  late final _$filterSneakerListAtom =
+      Atom(name: '_WebControllerBase.filterSneakerList', context: context);
+
+  @override
+  ObservableList<Sneaker> get filterSneakerList {
+    _$filterSneakerListAtom.reportRead();
+    return super.filterSneakerList;
+  }
+
+  @override
+  set filterSneakerList(ObservableList<Sneaker> value) {
+    _$filterSneakerListAtom.reportWrite(value, super.filterSneakerList, () {
+      super.filterSneakerList = value;
+    });
+  }
+
+  late final _$fetchSneakersAsyncAction =
+      AsyncAction('_WebControllerBase.fetchSneakers', context: context);
+
+  @override
+  Future fetchSneakers() {
+    return _$fetchSneakersAsyncAction.run(() => super.fetchSneakers());
+  }
+
   late final _$_WebControllerBaseActionController =
       ActionController(name: '_WebControllerBase', context: context);
 
@@ -40,9 +80,22 @@ mixin _$WebController on _WebControllerBase, Store {
   }
 
   @override
+  dynamic searchFilteredSneaker(String filter) {
+    final _$actionInfo = _$_WebControllerBaseActionController.startAction(
+        name: '_WebControllerBase.searchFilteredSneaker');
+    try {
+      return super.searchFilteredSneaker(filter);
+    } finally {
+      _$_WebControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
-isGridView: ${isGridView}
+isGridView: ${isGridView},
+sneakersList: ${sneakersList},
+filterSneakerList: ${filterSneakerList}
     ''';
   }
 }

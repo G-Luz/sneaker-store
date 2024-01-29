@@ -8,10 +8,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
-class HomeMobileUi extends StatelessWidget {
+class HomeMobileUi extends StatefulWidget {
   HomeMobileUi({Key? key}) : super(key: key);
 
+  @override
+  State<HomeMobileUi> createState() => _HomeMobileUiState();
+}
+
+class _HomeMobileUiState extends State<HomeMobileUi> {
   final controller = Modular.get<MobileController>();
+
+  @override
+  void initState() {
+    super.initState();
+    controller.fetchSneakers();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +55,6 @@ class HomeMobileUi extends StatelessWidget {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: TextField(
-                            key: key,
                             keyboardType: TextInputType.text,
                             style: const TextStyle(fontSize: 15),
                             decoration: InputDecoration(
@@ -53,7 +63,10 @@ class HomeMobileUi extends StatelessWidget {
                               suffixIcon: Icon(Icons.search,
                                   color: Colors.grey.withOpacity(.4)),
                             ),
-                            onChanged: (value) => {},
+                            onChanged: (filter) =>
+                                controller.searchFilteredSneaker(
+                              filter.toLowerCase(),
+                            ),
                           ),
                         ),
                       ),
@@ -93,11 +106,16 @@ class HomeMobileUi extends StatelessWidget {
                         crossAxisSpacing: 16,
                         mainAxisSpacing: 16,
                       ),
-                      itemCount: 10,
+                      itemCount: controller.filterSneakerList.isNotEmpty
+                          ? controller.filterSneakerList.length
+                          : controller.sneakersList.length,
                       itemBuilder: (context, index) {
-                        return const AppGridItem(
+                        return AppGridItem(
                           isWebView: false,
-                          
+                          sneaker: controller.filterSneakerList.isNotEmpty
+                              ? controller.filterSneakerList[index]
+                              : controller.sneakersList[index],
+                          onTapCallback: () {},
                         );
                       },
                     )
@@ -105,9 +123,16 @@ class HomeMobileUi extends StatelessWidget {
                     ListView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      itemCount: 10,
+                      itemCount: controller.filterSneakerList.isNotEmpty
+                          ? controller.filterSneakerList.length
+                          : controller.sneakersList.length,
+                      
                       itemBuilder: (context, index) {
-                        return AppListItem();
+                        return AppListItem(
+                          sneaker: controller.filterSneakerList.isNotEmpty
+                              ? controller.filterSneakerList[index]
+                              : controller.sneakersList[index],
+                        );
                       },
                     ),
                   const SizedBox(height: 20),

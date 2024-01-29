@@ -96,15 +96,13 @@ abstract class _ClientRepositoryBase with Store {
     }
   }
 
-  Future<Response<T>?> put<T>({
+  Future<Response<T>?> patch<T>({
     required String endpoint,
     Map<String, dynamic>? bodyMapper,
     Map<String, dynamic>? queryMapper,
   }) async {
     try {
-      print('Endpoint: $endpoint');
-      print('Body Mapper: $bodyMapper');
-      final response = await dio.put<T>('${Endpoints.baseURL}$endpoint',
+      final response = await dio.patch<T>('${Endpoints.baseURL}$endpoint',
           data: bodyMapper,
           queryParameters: queryMapper,
           options: Options(

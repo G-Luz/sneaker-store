@@ -58,7 +58,7 @@ class AppSidebar extends StatelessWidget {
           ),
           AppSideBarItem(
             icon: Icons.group,
-            optionTitle: 'Produtos',
+            optionTitle: 'Usuários',
             onTapCallback: () {},
           ),
         ],

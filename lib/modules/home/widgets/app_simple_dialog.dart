@@ -16,12 +16,15 @@ import 'package:flutter_modular/flutter_modular.dart';
 
 Future showSimpleDialog({
   required BuildContext context,
+  Sneaker? sneaker,
 }) {
   return showDialog<void>(
     context: context,
     barrierDismissible: false,
     builder: (context) {
-      return SimpleDialog();
+      return SimpleDialog(
+        sneaker: sneaker,
+      );
     },
   );
 }
@@ -84,6 +87,12 @@ class SimpleDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
 
+    if (sneaker != null) {
+      if (!controller.hasUpdatedScreen) {
+        controller.onUpdatedFields(sneaker!);
+      }
+    }
+
     return CloseDialog(
       backgroundColor: AppColors.backgroundGray,
       hasHeightLimit: true,
@@ -120,7 +129,9 @@ class SimpleDialog extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   AppTextfield(
+                                    controller: controller.urlController,
                                     hint: 'Url da foto',
+                                    // initialValue: sneaker?.imgUrl,
                                     keyboardType: TextInputType.text,
                                     errorText: controller.urlError,
                                     prefixIcon: const Icon(
@@ -132,7 +143,9 @@ class SimpleDialog extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 10),
                                   AppTextfield(
+                                    controller: controller.nameController,
                                     hint: 'Nome',
+                                    // initialValue: sneaker?.name,
                                     keyboardType: TextInputType.text,
                                     errorText: controller.nameError,
                                     prefixIcon: const Icon(
@@ -144,7 +157,9 @@ class SimpleDialog extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 10),
                                   AppTextfield(
+                                    controller: controller.priceController,
                                     hint: 'Preço',
+                                    // initialValue: sneaker?.price.toString(),
                                     keyboardType: TextInputType.number,
                                     errorText: controller.priceError,
                                     prefixIcon: const Icon(
@@ -156,7 +171,9 @@ class SimpleDialog extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 10),
                                   AppTextfield(
+                                    controller: controller.ratingController,
                                     hint: 'Avaliações',
+                                    // initialValue: sneaker?.rating.toString(),
                                     keyboardType: TextInputType.text,
                                     errorText: controller.ratingError,
                                     prefixIcon: const Icon(
@@ -194,7 +211,7 @@ class SimpleDialog extends StatelessWidget {
               ),
               const SizedBox(height: 50),
               AppButton(
-                text: 'Cadastrar',
+                text: sneaker != null ? 'Atualizar' : 'Cadastrar',
                 width: kIsWeb ? deviceSize.width * .15 : deviceSize.width * .9,
                 height:
                     kIsWeb ? deviceSize.height * .06 : deviceSize.height * .07,
@@ -209,9 +226,11 @@ class SimpleDialog extends StatelessWidget {
                       Modular.to.pop();
                       await showAutoCloseSuccessDialog(
                         context,
-                        'Tênis cadastrado com sucesso!',
+                        sneaker != null
+                            ? 'Informações atualizadas com sucesso'
+                            : 'Tênis cadastrado com sucesso!',
                       );
-                      Modular.to.pop();
+                      Modular.to.pop(true);
                     }
                   } else {
                     if (context.mounted) {

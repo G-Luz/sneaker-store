@@ -1,35 +1,28 @@
 import 'package:dale_poc/constants/app_colors.dart';
-import 'package:dale_poc/constants/app_images.dart';
-import 'package:dale_poc/modules/home/pages/web/controller/web_controller.dart';
-import 'package:dale_poc/modules/home/widgets/app_simple_dialog.dart';
 import 'package:dale_poc/widgets/app_text.dart';
 import 'package:flutter/material.dart';
 
 class AppAddGridItem extends StatelessWidget {
   const AppAddGridItem({
     Key? key,
-    required this.controller,
+    required this.onTapCallback,
   }) : super(key: key);
 
-  final WebController controller;
+  final VoidCallback onTapCallback;
 
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
-        onTap: () {
-          showSimpleDialog(
-            context: context,
-          );
-        },
+        onTap: () => onTapCallback(),
         child: Container(
           decoration: BoxDecoration(
             color: AppColors.darkWhite,
             borderRadius: BorderRadius.circular(10),
             image: const DecorationImage(
               image: NetworkImage(
-                'https://picsum.photos/200',
+                'https://img.lovepik.com/free-png/20211206/lovepik-vector-sneakers-png-image_401350356_wh1200.png',
               ),
               fit: BoxFit.fill,
             ),
@@ -55,14 +48,14 @@ class AppAddGridItem extends StatelessWidget {
                 ),
               ],
             ),
-            child: Column(
+            child: const Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
                   Icons.add,
                   color: AppColors.darkWhite,
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: 10),
                 AppText(
                   text: 'Adicionar novo produto',
                   fontColor: AppColors.darkWhite,
@@ -78,16 +71,19 @@ class AppAddGridItem extends StatelessWidget {
 }
 
 class AppAddListItem extends StatelessWidget {
-  const AppAddListItem({Key? key}) : super(key: key);
+  const AppAddListItem({
+    Key? key,
+    required this.onTapCallback,
+  }) : super(key: key);
+
+  final VoidCallback onTapCallback;
 
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
-        onTap: () {
-          // showSimpleDialog(context, 'eae', 'opa dnv', AppImages.icApple);
-        },
+        onTap: () => onTapCallback(),
         child: Container(
           height: 80,
           margin: const EdgeInsets.symmetric(
@@ -99,9 +95,8 @@ class AppAddListItem extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
             image: const DecorationImage(
               image: NetworkImage(
-                'https://picsum.photos/200',
+                'https://img.lovepik.com/free-png/20211206/lovepik-vector-sneakers-png-image_401350356_wh1200.png',
               ),
-              fit: BoxFit.fill,
             ),
             boxShadow: [
               BoxShadow(
@@ -125,14 +120,14 @@ class AppAddListItem extends StatelessWidget {
                 ),
               ],
             ),
-            child: Column(
+            child: const Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
                   Icons.add,
                   color: AppColors.darkWhite,
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: 10),
                 AppText(
                   text: 'Adicionar novo produto',
                   fontColor: AppColors.darkWhite,

@@ -12,17 +12,38 @@ abstract class _WebControllerBase with Store {
   @observable
   bool isGridView = true;
 
+  @observable
+  ObservableList<Sneaker> sneakersList = ObservableList<Sneaker>();
+
+  @observable
+  ObservableList<Sneaker> filterSneakerList = ObservableList<Sneaker>();
+
   @action
   handleChangeView() {
     isGridView = !isGridView;
   }
 
-  Stream<List<Sneaker>?> sneakersStream() async* {
-    while (true) {
-      await Future.delayed(const Duration(milliseconds: 1200));
-      print('ta chamando??');
-      List<Sneaker>? sneakers = await _repository.retrieveSneakerList();
-      yield sneakers;
+  @action
+  searchFilteredSneaker(String filter) {
+    filterSneakerList.clear();
+
+    if (sneakersList.isNotEmpty) {
+      for (final sneaker in sneakersList) {
+        if (sneaker.name.toLowerCase().contains(filter)) {}
+
+        if (sneaker.name.toLowerCase().contains(filter)) {
+          filterSneakerList.add(sneaker);
+        }
+      }
+    }
+  }
+
+  @action
+  fetchSneakers() async {
+    final sneakers = await _repository.retrieveSneakerList();
+    if (sneakers != null && sneakers.isNotEmpty) {
+      sneakersList.clear();
+      sneakersList.addAll(sneakers);
     }
   }
 }

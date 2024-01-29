@@ -1,10 +1,16 @@
 import 'package:dale_poc/constants/app_colors.dart';
 import 'package:dale_poc/modules/home/domain/sneaker.dart';
+import 'package:dale_poc/modules/home/widgets/app_simple_dialog.dart';
 import 'package:dale_poc/widgets/app_text.dart';
 import 'package:flutter/material.dart';
 
 class AppListItem extends StatelessWidget {
-  const AppListItem({Key? key}) : super(key: key);
+  const AppListItem({
+    Key? key,
+    required this.sneaker,
+  }) : super(key: key);
+
+  final Sneaker sneaker;
 
   @override
   Widget build(BuildContext context) {
@@ -42,8 +48,8 @@ class AppListItem extends StatelessWidget {
             height: 60,
             width: 65,
             decoration: BoxDecoration(
-              image: const DecorationImage(
-                image: NetworkImage('https://picsum.photos/200'),
+              image: DecorationImage(
+                image: NetworkImage(sneaker.imgUrl),
                 fit: BoxFit.fill,
               ),
               borderRadius: BorderRadius.circular(10),
@@ -63,14 +69,14 @@ class AppListItem extends StatelessWidget {
                     SizedBox(
                       width: 150,
                       child: AppText(
-                        text: 'Nome do produto',
+                        text: sneaker.name,
                         fontColor: Colors.black.withOpacity(.3),
                         fontSize: 15,
                         textOverflow: TextOverflow.ellipsis,
                       ),
                     ),
                     AppText(
-                      text: '\$580',
+                      text: '\$${sneaker.price}',
                       fontColor: Colors.black,
                     ),
                     Row(
@@ -81,7 +87,7 @@ class AppListItem extends StatelessWidget {
                           size: 15,
                         ),
                         AppText(
-                          text: '4.3',
+                          text: '${sneaker.rating}',
                           fontColor: Colors.grey.withOpacity(.4),
                         ),
                       ],
@@ -123,6 +129,7 @@ class AppWebListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final deviceSize = MediaQuery.of(context).size;
     return Container(
       height: 80,
       margin: const EdgeInsets.symmetric(
@@ -149,10 +156,10 @@ class AppWebListItem extends StatelessWidget {
         children: [
           Container(
             height: 60,
-            width: 65,
+            width: deviceSize.width * .05,
             decoration: BoxDecoration(
-              image: const DecorationImage(
-                image: NetworkImage('https://picsum.photos/200'),
+              image: DecorationImage(
+                image: NetworkImage(sneaker.imgUrl),
                 fit: BoxFit.fill,
               ),
               borderRadius: BorderRadius.circular(10),
@@ -161,14 +168,14 @@ class AppWebListItem extends StatelessWidget {
           SizedBox(
             width: 150,
             child: AppText(
-              text: 'Nome do produto',
+              text: sneaker.name,
               fontColor: Colors.black.withOpacity(.3),
               fontSize: 15,
               textOverflow: TextOverflow.ellipsis,
             ),
           ),
           AppText(
-            text: '\$580',
+            text: '\$${sneaker.price}',
             fontColor: Colors.black,
           ),
           Row(
@@ -179,7 +186,7 @@ class AppWebListItem extends StatelessWidget {
                 size: 15,
               ),
               AppText(
-                text: '4.3',
+                text: '${sneaker.rating}.0',
                 fontColor: Colors.grey.withOpacity(.4),
               ),
             ],
@@ -193,7 +200,10 @@ class AppWebListItem extends StatelessWidget {
               shape: BoxShape.circle,
             ),
             child: IconButton(
-              onPressed: () {},
+              onPressed: () => showSimpleDialog(
+                context: context,
+                sneaker: sneaker,
+              ),
               icon: const Icon(
                 Icons.edit,
                 color: AppColors.darkWhite,

@@ -7,13 +7,17 @@ class AppTextfield extends StatelessWidget {
   const AppTextfield({
     Key? key,
     required this.hint,
+    this.controller,
+    this.initialValue,
     required this.prefixIcon,
     this.errorText = '',
     this.keyboardType = TextInputType.text,
     required this.onChangedCallback,
   }) : super(key: key);
 
+  final TextEditingController? controller;
   final String hint;
+  final String? initialValue;
   final String errorText;
 
   final Widget prefixIcon;
@@ -33,8 +37,10 @@ class AppTextfield extends StatelessWidget {
             color: AppColors.lightGrey.withOpacity(.4),
             borderRadius: BorderRadius.circular(8),
           ),
-          child: TextField(
+          child: TextFormField(
             key: key,
+            controller: controller,
+            // initialValue: initialValue,
             keyboardType: keyboardType,
             style: const TextStyle(fontSize: 15),
             decoration: InputDecoration(

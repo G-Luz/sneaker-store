@@ -8,15 +8,18 @@ class AppGridItem extends StatelessWidget {
   const AppGridItem({
     Key? key,
     required this.isWebView,
-    this.sneaker,
+    required this.sneaker,
+    required this.onTapCallback,
   }) : super(key: key);
 
   final bool isWebView;
-  final Sneaker? sneaker;
+  final Sneaker sneaker;
+  final VoidCallback onTapCallback;
 
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
+
     return Container(
       decoration: BoxDecoration(
         color: AppColors.darkWhite,
@@ -34,7 +37,7 @@ class AppGridItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           kIsWeb
-              ? const Spacer()
+              ? const SizedBox(height: 25)
               : Container(
                   margin: const EdgeInsets.symmetric(
                     vertical: 5,
@@ -53,11 +56,11 @@ class AppGridItem extends StatelessWidget {
             children: [
               Container(
                 height: 110,
-                width: 110,
+                width: kIsWeb ? deviceSize.width * .08 : deviceSize.width * .3,
                 decoration: BoxDecoration(
-                  image: const DecorationImage(
-                    image: NetworkImage('https://picsum.photos/200'),
-                    fit: BoxFit.fill,
+                  image: DecorationImage(
+                    image: NetworkImage(sneaker.imgUrl),
+                    fit: BoxFit.fitWidth,
                   ),
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -79,16 +82,18 @@ class AppGridItem extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     SizedBox(
-                      width: deviceSize.width * .08,
+                      width: kIsWeb
+                          ? deviceSize.width * .08
+                          : deviceSize.width * .1,
                       child: AppText(
-                        text: 'Nome do produto',
+                        text: sneaker.name,
                         fontColor: Colors.black.withOpacity(.3),
                         fontSize: 15,
                         textOverflow: TextOverflow.ellipsis,
                       ),
                     ),
                     AppText(
-                      text: '\$580',
+                      text: '\$${sneaker.price}',
                       fontColor: Colors.black,
                     ),
                     Row(
@@ -99,7 +104,7 @@ class AppGridItem extends StatelessWidget {
                           size: 15,
                         ),
                         AppText(
-                          text: '4.3',
+                          text: '${sneaker.rating}.0',
                           fontColor: Colors.grey.withOpacity(.4),
                         )
                       ],
@@ -116,7 +121,7 @@ class AppGridItem extends StatelessWidget {
                   shape: BoxShape.circle,
                 ),
                 child: IconButton(
-                  onPressed: () {},
+                  onPressed: () => onTapCallback(),
                   icon: Icon(
                     isWebView ? Icons.edit : Icons.add,
                     color: AppColors.darkWhite,

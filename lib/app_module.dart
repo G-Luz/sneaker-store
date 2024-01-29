@@ -12,8 +12,7 @@ class AppModule extends Module {
 
   @override
   void routes(r) {
-    // r.module(Routes.initialRoute, module: AuthenticationModule());
-    // r.module(Routes.homeModule, module: HomeModule());
-    r.module(Routes.initialRoute, module: HomeModule());
+    r.module(Routes.initialRoute, module: AuthenticationModule());
+    r.module(Routes.homeModule, module: HomeModule());
   }
 }

@@ -2,6 +2,7 @@ import 'package:dale_poc/modules/home/domain/sneaker.dart';
 import 'package:dale_poc/modules/home/repository/home_repository.dart';
 import 'package:dale_poc/utils/debounce.dart';
 import 'package:dale_poc/utils/string_utils.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 part 'sneaker_form_controller.g.dart';
@@ -45,6 +46,34 @@ abstract class _SneakerFormControllerBase with Store {
   @observable
   String ratingError = '';
 
+  @observable
+  bool hasUpdatedScreen = false;
+
+  @observable
+  Sneaker? sneaker;
+
+  TextEditingController nameController = TextEditingController();
+  TextEditingController urlController = TextEditingController();
+  TextEditingController priceController = TextEditingController();
+  TextEditingController ratingController = TextEditingController();
+
+  @action
+  onUpdatedFields(Sneaker sneaker) {
+    this.sneaker = sneaker;
+    nameController.text = sneaker.name;
+    urlController.text = sneaker.imgUrl;
+    priceController.text = sneaker.price.toString();
+    ratingController.text = sneaker.rating.toString();
+
+    name = sneaker.name;
+    url = sneaker.imgUrl;
+    price = sneaker.price.toString();
+    rating = sneaker.rating.toString();
+    hasUpdatedScreen = true;
+
+    formStatus = SneakerFormStatus.validForm;
+  }
+
   @action
   onNameChanged(String name) {
     debouncer.run(
@@ -84,6 +113,7 @@ abstract class _SneakerFormControllerBase with Store {
         if (price.isNotEmpty && int.parse(price) > 100) {
           this.price = price;
           priceError = '';
+          validateFields();
         } else {
           priceError = 'O preço do produto deve ser no mínimo \$100,00';
           validateFields();
@@ -129,13 +159,23 @@ abstract class _SneakerFormControllerBase with Store {
       () async {
         if (formStatus == SneakerFormStatus.validForm) {
           formStatus = SneakerFormStatus.loading;
-          final sneaker = Sneaker(
+
+          final registerResult;
+
+          Sneaker sneaker = Sneaker(
             name: name,
             imgUrl: url,
             price: double.parse(price),
             rating: int.parse(rating),
           );
-          final registerResult = await _repository.registerSneaker(sneaker);
+
+          if (this.sneaker != null) {
+            sneaker = sneaker.copyWith(id: this.sneaker!.id);
+            registerResult = await _repository.updatedSneaker(sneaker);
+          } else {
+            registerResult = await _repository.registerSneaker(sneaker);
+          }
+
           if (registerResult) {
             formStatus = SneakerFormStatus.success;
             return '';

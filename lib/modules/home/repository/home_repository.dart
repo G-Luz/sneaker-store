@@ -29,4 +29,12 @@ abstract class _HomeRepositoryBase with Store {
       return null;
     }
   }
+
+  Future<bool> updatedSneaker(Sneaker sneaker) async {
+    final result = await _client.patch(
+      endpoint: '/sneakers/${sneaker.id}',
+      bodyMapper: sneaker.toJson(),
+    );
+    return result != null;
+  }
 }
