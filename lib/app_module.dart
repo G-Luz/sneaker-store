@@ -1,5 +1,6 @@
 import 'package:dale_poc/constants/routes.dart';
 import 'package:dale_poc/modules/authentication/authentication_module.dart';
+import 'package:dale_poc/modules/home/home_module.dart';
 import 'package:dale_poc/repositories/client/client_repository.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -11,6 +12,8 @@ class AppModule extends Module {
 
   @override
   void routes(r) {
-    r.module(Routes.initialRoute, module: AuthenticationModule());
+    // r.module(Routes.initialRoute, module: AuthenticationModule());
+    // r.module(Routes.homeModule, module: HomeModule());
+    r.module(Routes.initialRoute, module: HomeModule());
   }
 }

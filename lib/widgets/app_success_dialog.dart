@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dale_poc/constants/app_colors.dart';
 import 'package:dale_poc/widgets/app_base_dialog.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -66,7 +67,7 @@ class _AppAutoCloseSuccessDialogState extends State<AppAutoCloseSuccessDialog> {
         child: DialogText(
           title: widget.title,
           description: widget.description,
-          fontSize: 30,
+          fontSize: kIsWeb ? 30 : 17,
         ),
       ),
     );

@@ -37,8 +37,10 @@ abstract class LoginControllerBase with Store {
       () {
         if (email.isValidEmail()) {
           this.email = email;
+          emailError = '';
           validateFields();
         } else {
+          this.email = '';
           emailError = 'Insira um e-mail válido.';
         }
       },
@@ -62,18 +64,6 @@ abstract class LoginControllerBase with Store {
     );
   }
 
-  ///TODO: QUANDO VOLTAR TERMINAR O LOGIN
-  ///
-  ///FAZER UMA BARRA LATERAL COM UM ÚNICO ITEM PRODUTOS
-  ///
-  ///PRIMEIRO CARD DE CADASTRO (FORM DE CADASTRO DE UM PRODUTO)
-  ///
-  ///O RESTANTE DOS CARDS É DE EXIBIÇÃO, SE CLICAR NUM CARD VAI ABRIR PARA EDITAR E REMOVER
-  ///
-  ///JA NO APP SÓ VAI PODER VISUALIZAR E ADD NO CARRINHO
-  ///
-  ///TERMINAR TUDO ISSO EM NO MAX 5 HRS 
-
   @action
   validateFields() {
     if ((email.isNotEmpty && emailError.isEmpty) &&
@@ -84,32 +74,30 @@ abstract class LoginControllerBase with Store {
     }
   }
 
-  // Future<User?> automaticallySignin() async {
-  //   return _repository.isLoggedin();
-  // }
-
   @action
   Future<dynamic> onSubmittedForm() async {
     return await Future.delayed(
       const Duration(seconds: 2),
       () async {
-        print('EAE FORM: ${formStatus}');
         if (formStatus == LoginFormStatus.valid) {
-          formStatus = LoginFormStatus.loading;
-
-          final loginResult = await _repository.findUserByEmailAndPassword(
-            email: email,
-            password: password,
-          );
-
-          print('LOGIN RESULT: ${loginResult}');
-          // if (loginResult is UserCredential) {
-          //   loginStatus = LoginFormStatus.success;
-          //   return loginResult.user!;
-          // } else {
-          //   loginStatus = LoginFormStatus.failure;
-          //   return loginResult;
-          // }
+          try {
+            formStatus = LoginFormStatus.loading;
+            final loginResult = await _repository.findUserByEmailAndPassword(
+              email: email,
+              password: password,
+            );
+            if (loginResult != null) {
+              formStatus = LoginFormStatus.success;
+              return loginResult;
+            } else {
+              formStatus = LoginFormStatus.failure;
+              validateFields();
+              return null;
+            }
+          } on Exception catch (e) {
+            print('Error: $e');
+            formStatus = LoginFormStatus.failure;
+          }
         } else {
           formStatus = LoginFormStatus.failure;
           return 'Verifique os campos e tente novamente.';

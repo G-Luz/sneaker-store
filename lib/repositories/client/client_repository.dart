@@ -15,8 +15,6 @@ abstract class _ClientRepositoryBase with Store {
     required JsonMapper<T> jsonMapper,
     Map<String, dynamic>? queryParameters,
   }) async {
-    print('Endpoint: $endpoint');
-    print('Query Mapper: $queryParameters');
     final response = await dio.get<Map<String, dynamic>>(
       '${Endpoints.baseURL}$endpoint',
       queryParameters: queryParameters,
@@ -34,8 +32,6 @@ abstract class _ClientRepositoryBase with Store {
     required ListMapper<T> listMapper,
     Map<String, dynamic>? queryParameters,
   }) async {
-    print('Endpoint: $endpoint');
-    print('Query Mapper: $queryParameters');
     final response = await dio.get<List<dynamic>>(
       '${Endpoints.baseURL}$endpoint',
       queryParameters: queryParameters,

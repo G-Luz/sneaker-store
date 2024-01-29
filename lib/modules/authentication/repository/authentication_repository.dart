@@ -23,18 +23,23 @@ abstract class AuthenticationRepositoryBase with Store {
     required String email,
     required String password,
   }) async {
+    try {
+      final result = await _client.post(
+        endpoint: '/auth/login',
+        bodyMapper: {
+          'users_email': email,
+          'users_password': password,
+        },
+      );
 
-    print('PORRA');
-    final result = await _client.post<User>(
-      endpoint: '/auth/login',
-      bodyMapper: {
-        'users_email': email,
-        'users_password': password,
-      },
-    );
-
-    if (result != null) {
-      return result.data;
+      if (result != null) {
+        if (result.data != null && result.data.length > 0) {
+          print('Response: ${result.data}');
+          return User.fromJson(result.data.first);
+        }
+      }
+    } on Exception {
+      return null;
     }
     return null;
   }

@@ -16,4 +16,8 @@ class AppImages {
   static const icFace = '$rootPath/face.png';
   static const icApple = '$rootPath/apple.png';
   static const logo = '$rootPath/logo.png';
+  static const icNotification = '$rootPath/ic_notification.png';
+  static const icPie = '$rootPath/ic_pie_chart.png';
+  static const icBar = '$rootPath/ic_bar_chart.png';
+  static const icLine = '$rootPath/ic_line_chart.png';
 }

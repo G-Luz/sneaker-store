@@ -7,7 +7,7 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Modular.setInitialRoute(Routes.loginModule);
+    // Modular.setInitialRoute(Routes.loginModule);
     return MaterialApp.router(
       title: 'Dale POC',
       debugShowCheckedModeBanner: false,

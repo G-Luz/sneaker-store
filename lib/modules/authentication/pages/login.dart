@@ -1,7 +1,10 @@
 import 'package:dale_poc/constants/app_colors.dart';
+import 'package:dale_poc/constants/routes.dart';
 import 'package:dale_poc/modules/authentication/controller/login/login_controller.dart';
 import 'package:dale_poc/widgets/app_button.dart';
+import 'package:dale_poc/widgets/app_loading.dart';
 import 'package:dale_poc/widgets/app_social_auth.dart';
+import 'package:dale_poc/widgets/app_success_dialog.dart';
 import 'package:dale_poc/widgets/app_text.dart';
 import 'package:dale_poc/widgets/app_textfield.dart';
 import 'package:flutter/foundation.dart';
@@ -79,8 +82,22 @@ class _LoginState extends State<Login> {
               height:
                   kIsWeb ? deviceSize.height * .06 : deviceSize.height * .07,
               backgroudColor: AppColors.green,
-              onPressedCallback: () => controller.onSubmittedForm(),
-            )
+              onPressedCallback: () async {
+                showAppLoading(context);
+                final result = await controller.onSubmittedForm();
+                if (result != null &&
+                    controller.formStatus == LoginFormStatus.success) {
+                  Modular.to.pop();
+                  Modular.to.pushReplacementNamed(Routes.homeModule);
+                } else {
+                  Modular.to.pop();
+                  if (context.mounted) {
+                    showAutoCloseSuccessDialog(context,
+                        'Houve um erro durante a requisição. Tente novamente mais tarde!');
+                  }
+                }
+              },
+            ),
           ],
         ),
       ),
